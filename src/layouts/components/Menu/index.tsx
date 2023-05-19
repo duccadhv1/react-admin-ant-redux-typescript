@@ -1,16 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Menu, Spin } from "antd";
-import { findAllBreadcrumb, getOpenKeys, handleRouter, searchRoute } from "@/utils/util";
-import { setMenuList } from "@/redux/modules/menu/action";
-import { setBreadcrumbList } from "@/redux/modules/breadcrumb/action";
 import { setAuthRouter } from "@/redux/modules/auth/action";
-import { getMenuList } from "@/api/modules/login";
-import { connect } from "react-redux";
-import type { MenuProps } from "antd";
+import { setBreadcrumbList } from "@/redux/modules/breadcrumb/action";
+import { setMenuList } from "@/redux/modules/menu/action";
+import { findAllBreadcrumb, getOpenKeys, handleRouter, searchRoute } from "@/utils/util";
 import * as Icons from "@ant-design/icons";
+import type { MenuProps } from "antd";
+import { Menu, Spin } from "antd";
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import Logo from "./components/Logo";
 import "./index.less";
+
+const menus = [
+	{
+		icon: "HomeOutlined",
+		title: "Home",
+		path: "/home/index"
+	},
+	{
+		icon: "FundOutlined",
+		title: "Dashboard",
+		path: "/dashboard"
+	}
+];
 
 const LayoutMenu = (props: any) => {
 	const { pathname } = useLocation();
@@ -65,15 +77,13 @@ const LayoutMenu = (props: any) => {
 	const getMenuData = async () => {
 		setLoading(true);
 		try {
-			const { data } = await getMenuList();
-			if (!data) return;
-			setMenuList(deepLoopFloat(data));
+			setMenuList(deepLoopFloat(menus));
 
-			setBreadcrumbList(findAllBreadcrumb(data));
+			setBreadcrumbList(findAllBreadcrumb(menus));
 
-			const dynamicRouter = handleRouter(data);
+			const dynamicRouter = handleRouter(menus);
 			setAuthRouter(dynamicRouter);
-			setMenuListAction(data);
+			setMenuListAction(menus);
 		} finally {
 			setLoading(false);
 		}
