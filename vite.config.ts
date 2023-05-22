@@ -35,12 +35,11 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 		},
 		// server config
 		server: {
-			host: "0.0.0.0", // 服务器主机名，如果允许外部访问，可设置为"0.0.0.0"
+			host: "0.0.0.0",
 			port: viteEnv.VITE_PORT,
 			open: viteEnv.VITE_OPEN,
 			cors: true,
 			// https: false,
-			// 代理跨域（mock 不需要配置，这里只是个事列）
 			proxy: {
 				"/api": {
 					target: "https://mock.mengxuegu.com/mock/62abda3212c1416424630a45", // easymock
@@ -59,14 +58,12 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 					}
 				}
 			}),
-			// * 使用 svg 图标
 			createSvgIconsPlugin({
 				iconDirs: [resolve(process.cwd(), "src/assets/icons")],
 				symbolId: "icon-[dir]-[name]"
 			}),
-			// * EsLint 报错信息显示在浏览器界面上
+			// * EsLint
 			eslintPlugin(),
-			// * 是否生成包预览
 			viteEnv.VITE_REPORT && visualizer(),
 			// * gzip compress
 			viteEnv.VITE_BUILD_GZIP &&
@@ -84,7 +81,6 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 		// build configure
 		build: {
 			outDir: "dist",
-			// esbuild 打包更快，但是不能去除 console.log，去除 console 使用 terser 模式
 			minify: "esbuild",
 			// minify: "terser",
 			// terserOptions: {
